@@ -23,6 +23,7 @@ const context = require("./node_core_ctx");
 const streamsRoute = require("./api/routes/streams");
 const serverRoute = require("./api/routes/server");
 const relayRoute = require("./api/routes/relay");
+const { checkAuth } = require("./node_core_utils");
 
 class NodeHttpServer {
   constructor(config) {
@@ -58,12 +59,8 @@ class NodeHttpServer {
     }
 
     if (this.config.http.api !== false) {
-      if (this.config.auth && this.config.auth.api) {
-        app.use(
-          ["/api/*", "/static/*", "/admin/*"],
-          basicAuth(this.config.auth.api_user, this.config.auth.api_pass)
-        );
-      }
+      app.use(["/api/*", "/static/*", "/admin/*"], checkAuth);
+
       const auth = {
         username: this.config.auth.api_user,
         password: this.config.auth.api_pass,
@@ -80,36 +77,31 @@ class NodeHttpServer {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache",
         });
-        if (req.query.sseKey !== this.config.auth.sseKey) {
-          res.write("data: Invalid authentication\n\n");
-          res.end();
-        } else {
-          sseServer.emitStreamInfo().then((result) => {
+        sseServer.emitStreamInfo(req).then((result) => {
+          res.write(result);
+        });
+
+        context.nodeEvent.on("postPublish", (id, args) => {
+          sseServer.emitStreamInfo(req).then((result) => {
             res.write(result);
           });
-
-          context.nodeEvent.on("postPublish", (id, args) => {
-            sseServer.emitStreamInfo().then((result) => {
-              res.write(result);
-            });
+        });
+        context.nodeEvent.on("postPlay", (id, args) => {
+          sseServer.emitStreamInfo(req).then((result) => {
+            res.write(result);
           });
-          context.nodeEvent.on("postPlay", (id, args) => {
-            sseServer.emitStreamInfo().then((result) => {
-              res.write(result);
-            });
+        });
+        context.nodeEvent.on("donePublish", (id, args) => {
+          sseServer.emitStreamInfo(req).then((result) => {
+            res.write(result);
           });
-          context.nodeEvent.on("donePublish", (id, args) => {
-            sseServer.emitStreamInfo().then((result) => {
-              res.write(result);
-            });
+        });
+        context.nodeEvent.on("donePlay", (id, args) => {
+          sseServer.emitStreamInfo(req).then((result) => {
+            res.write(result);
+            res.flush();
           });
-          context.nodeEvent.on("donePlay", (id, args) => {
-            sseServer.emitStreamInfo().then((result) => {
-              res.write(result);
-              res.flush();
-            });
-          });
-        }
+        });
       });
     }
 

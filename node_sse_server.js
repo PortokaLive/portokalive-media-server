@@ -6,18 +6,24 @@ class NodeSseServer {
     this.port = port;
   }
 
-  async fetchAxios() {
-    const result = await axios.get(
-      `http://localhost:${this.port}/api/streams`,
-      {
-        auth: this.auth,
-      }
-    );
+  async fetchAxios(req) {
+    const result = await axios
+      .get(
+        `http://localhost:${this.port}/api/streams?token=${
+          req.query.token || ""
+        }`
+      )
+      .catch((err) => {
+        return err;
+      });
     return result.data;
   }
 
-  async emitStreamInfo() {
-    const resp = await this.fetchAxios();
+  async emitStreamInfo(req) {
+    const resp = await this.fetchAxios(req);
+    if (!resp) {
+      return "data: Unable to fetch streams";
+    }
     if (resp.live) {
       const live = Object.values(resp.live);
       const streamObjects = live.map((v) => {

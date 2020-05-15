@@ -1,4 +1,7 @@
 const NodeMediaServer = require('./node_media_server');
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const config = {
   rtmp: {
@@ -17,12 +20,8 @@ const config = {
   },
   auth: {
     api: true,
-    api_user: 'portoka.live',
-    api_pass: 'portoka.live140295$',
     play: false,
     publish: false,
-    secret: 'portoka.live140295$',
-    sseKey: '4Jp2Q3RyIu'
   },
 };
 
