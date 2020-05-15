@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:alpine
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -17,4 +17,4 @@ COPY . .
 
 EXPOSE 8000
 EXPOSE 1935
-CMD [ "node", "index.js" ]
+CMD [ "node", "." ]
