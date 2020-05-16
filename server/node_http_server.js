@@ -20,9 +20,9 @@ const HTTP_MEDIAROOT = "./media";
 const Logger = require("./node_core_logger");
 const context = require("./node_core_ctx");
 
-const streamsRoute = require("./api/routes/streams");
-const serverRoute = require("./api/routes/server");
-const relayRoute = require("./api/routes/relay");
+const streamsRoute = require("../api/routes/streams");
+const serverRoute = require("../api/routes/server");
+const relayRoute = require("../api/routes/relay");
 const { checkAuth } = require("./node_core_utils");
 
 class NodeHttpServer {
