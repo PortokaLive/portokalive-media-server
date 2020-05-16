@@ -51,15 +51,8 @@ class NodeHttpServer {
       this.onConnect(req, res);
     });
 
-    let adminEntry = path.join(__dirname + "/public/admin/index.html");
-    if (Fs.existsSync(adminEntry)) {
-      app.get("/admin/*", (req, res) => {
-        res.sendFile(adminEntry);
-      });
-    }
-
     if (this.config.http.api !== false) {
-      app.use(["/api/*", "/static/*", "/admin/*"], checkAuth);
+      app.use(["/api/*"], checkAuth);
 
       const auth = {
         username: this.config.auth.api_user,
@@ -105,7 +98,7 @@ class NodeHttpServer {
       });
     }
 
-    app.use(Express.static(path.join(__dirname + "/public")));
+    app.use(Express.static(path.join(__dirname,"../static")));
     app.use(Express.static(this.mediaroot));
     if (config.http.webroot) {
       app.use(Express.static(config.http.webroot));
