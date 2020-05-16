@@ -1,4 +1,4 @@
-const NodeMediaServer = require("./node_media_server");
+const NodeMediaServer = require("./server/node_media_server");
 const dotenv = require("dotenv");
 
 dotenv.config();
