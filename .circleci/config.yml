@@ -1,14 +1,13 @@
 version: 2
 jobs:
-    build:
-        docker:
-            - image: circleci/node:7
-        steps:
-            - checkout
-            - deploy:
-                name: deploy-on-DO
-                command: |
-                  ssh -o "StrictHostKeyChecking no" $DO_USER@$DO_IP "cd ~/$DO_APP_DIR; git pull; npm install; pm2 delete $DO_APP_NAME; pm2 start index.js --name $DO_APP_NAME"
+  build:
+    docker:
+      - image: circleci/node:7
+    steps:
+      - deploy:
+          name: deploy-on-DO
+          command: |
+            ssh -o "StrictHostKeyChecking no" $DO_USER@$DO_IP "cd ~/$DO_APP_DIR; git pull; npm install; pm2 delete $DO_APP_NAME; pm2 start index.js --name $DO_APP_NAME"
 workflows:
   version: 2
   build-deploy:
