@@ -9,7 +9,7 @@ jobs:
                 name: install-dependencies
                 command: npm install
             - deploy:
-                name: digital-ocean
+                name: deploy-on-DO
                 command: |
                   ssh -o "StrictHostKeyChecking no" $DO_USER@$DO_IP "cd ~/$DO_APP_DIR; git pull; npm install; pm2 delete $DO_APP_NAME; pm2 start index.js --name $DO_APP_NAME"
 workflows:
