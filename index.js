@@ -6,10 +6,10 @@ dotenv.config();
 const config = {
   rtmp: {
     port: 1935,
-    chunk_size: 60000,
-    gop_cache: true,
-    ping: 30,
-    ping_timeout: 60,
+    chunk_size: 600000,
+    gop_cache: false,
+    ping: 1,
+    ping_timeout: 1,
   },
   http: {
     port: 8000,
