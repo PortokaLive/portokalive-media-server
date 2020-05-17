@@ -64,6 +64,9 @@ class NodeHttpServer {
       app.use("/api/streams", streamsRoute(context));
       app.use("/api/server", serverRoute(context));
       app.use("/api/relay", relayRoute(context));
+      app.get("/api/buffer/:publisherId", (req, res, next) => {
+        this.onFetch(req, res);
+      });
       app.use("/sse/streams", (req, res) => {
         res.writeHead(200, {
           Connection: "keep-alive",
@@ -98,7 +101,7 @@ class NodeHttpServer {
       });
     }
 
-    app.use(Express.static(path.join(__dirname,"../static")));
+    app.use(Express.static(path.join(__dirname, "../static")));
     app.use(Express.static(this.mediaroot));
     if (config.http.webroot) {
       app.use(Express.static(config.http.webroot));
@@ -211,6 +214,11 @@ class NodeHttpServer {
   onConnect(req, res) {
     let session = new NodeFlvSession(this.config, req, res);
     session.run();
+  }
+
+  onFetch(req, res) {
+    let session = new NodeFlvSession(this.config, req, res);
+    session.fetch();
   }
 }
 

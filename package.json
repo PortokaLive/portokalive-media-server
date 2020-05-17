@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "start:watch": "nodemon ."
+    "start:watch": "nodemon .",
+    "start:debug": "nodemon --no-lazy --inspect-brk ."
   },
   "author": "",
   "license": "ISC",

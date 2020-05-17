@@ -11,11 +11,6 @@ const config = {
     ping: 1,
     ping_timeout: 1,
   },
-  https: {
-    port: 8443,
-    key: "./privatekey.pem",
-    cert: "./certificate.pem",
-  },
   http: {
     port: 8000,
     allow_origin: "*",
