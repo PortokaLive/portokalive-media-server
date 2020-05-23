@@ -164,7 +164,7 @@ class NodeFlvSession {
       );
       context.idlePlayers.add(this.id);
       this.isIdling = true;
-      this.res.statusCode = 401;
+      this.res.statusCode = 404;
       this.res.end("NOT_FOUND");
       return;
     }
