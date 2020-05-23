@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node .",
     "start:watch": "nodemon .",
-    "start:debug": "nodemon --no-lazy --inspect-brk ."
+    "start:debug": "nodemon --no-lazy --inspect-brk --inspect=5858 ."
   },
   "author": "",
   "license": "ISC",

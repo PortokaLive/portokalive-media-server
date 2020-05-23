@@ -164,6 +164,8 @@ class NodeFlvSession {
       );
       context.idlePlayers.add(this.id);
       this.isIdling = true;
+      this.res.statusCode = 401;
+      this.res.end("NOT_FOUND");
       return;
     }
 
@@ -253,6 +255,7 @@ class NodeFlvSession {
   }
 
   onStartFetch() {
+    this.res.sendResponseHeaders(200,0);
     let publisherId = context.publishers.get(
       `/live/${this.req.params.publisherId}`
     );

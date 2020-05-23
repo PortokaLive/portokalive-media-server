@@ -22,7 +22,7 @@ class NodeSseServer {
   async emitStreamInfo(req) {
     const resp = await this.fetchAxios(req);
     if (!resp) {
-      return "data: Unable to fetch streams";
+      return "data: Unable to fetch streams\n\n";
     }
     if (resp.live) {
       const live = Object.values(resp.live);

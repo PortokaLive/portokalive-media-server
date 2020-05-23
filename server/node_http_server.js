@@ -46,7 +46,7 @@ class NodeHttpServer {
       req.method === "OPTIONS" ? res.sendStatus(200) : next();
     });
 
-    app.get("*.flv", (req, res, next) => {
+    app.get("*.flv", checkAuth, (req, res, next) => {
       req.nmsConnectionType = "http";
       this.onConnect(req, res);
     });
@@ -137,20 +137,6 @@ class NodeHttpServer {
       Logger.log("Node Media Http Server Close.");
     });
 
-    this.wsServer = new WebSocket.Server({ server: this.httpServer });
-
-    this.wsServer.on("connection", (ws, req) => {
-      req.nmsConnectionType = "ws";
-      this.onConnect(req, ws);
-    });
-
-    this.wsServer.on("listening", () => {
-      Logger.log(`Node Media WebSocket Server started on port: ${this.port}`);
-    });
-    this.wsServer.on("error", (e) => {
-      Logger.error(`Node Media WebSocket Server ${e}`);
-    });
-
     if (this.httpsServer) {
       this.httpsServer.listen(this.sport, () => {
         Logger.log(`Node Media Https Server started on port: ${this.sport}`);
@@ -162,22 +148,6 @@ class NodeHttpServer {
 
       this.httpsServer.on("close", () => {
         Logger.log("Node Media Https Server Close.");
-      });
-
-      this.wssServer = new WebSocket.Server({ server: this.httpsServer });
-
-      this.wssServer.on("connection", (ws, req) => {
-        req.nmsConnectionType = "ws";
-        this.onConnect(req, ws);
-      });
-
-      this.wssServer.on("listening", () => {
-        Logger.log(
-          `Node Media WebSocketSecure Server started on port: ${this.sport}`
-        );
-      });
-      this.wssServer.on("error", (e) => {
-        Logger.error(`Node Media WebSocketSecure Server ${e}`);
       });
     }
 

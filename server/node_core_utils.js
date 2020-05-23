@@ -97,18 +97,23 @@ const axios = require("axios");
 function checkAuth(req, res, next) {
   if (!req.query.token) {
     res.statusCode = 401;
-    res.end("Unauthorized");
+    res.end("Unauthenticated");
   } else {
     axios
       .post(getEnv("USER_API") + "user/validateToken", null, {
         headers: { Authorization: "Bearer " + req.query.token },
       })
-      .then(() => {
-        next();
+      .then((response) => {
+        if (response.data && response.data.result === "VALID") {
+          next();
+        } else {
+          res.statusCode = 401;
+          res.end("Unauthorized");
+        }
       })
-      .catch((err) => {
+      .catch(() => {
         res.statusCode = 401;
-        res.end(err.message);
+        res.end("Unauthorized");
       });
   }
 }
